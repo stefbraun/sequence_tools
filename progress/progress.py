@@ -5,42 +5,43 @@ class progress_tracker:
         self.wait_period = wait_period
         self.max_patience = max_patience
         self.track = []
-        self.best = None
+        self.best_error = None
         self.best_epoch = 0
+        self.best_bool = False
         self.patience = 0
-        self.brk = False
+        self.break_bool = False
 
-    def get_patience(self):
+    def update_patience(self):
         if len(self.track) > self.wait_period:
             current_epoch = len(self.track)-1 #counting is index based: 0th, 1st, 2nd epoch...
-            self.best = np.min(self.track)
-            self.best_epoch = np.argmin(self.track)  # numpy.argmin only finds first occurence
             self.patience = current_epoch - self.best_epoch
         else:
             self.patience = 0
         return self.patience
 
-    def check_patience(self):
-        patience = self.get_patience()
-        bool_break = self.bool_break()
-        return bool_break
-
-    def bool_break(self):
+    def update_break(self):
         if self.patience > self.max_patience:
-            self.brk = 1
+            self.break_bool = 1
         else:
-            self.brk = 0
-        return self.brk
+            self.break_bool = 0
+        return self.break_bool
 
-    def bool_best(self):
-        bool_best = False
+    def update_best(self):
         if len(self.track) > self.wait_period: # work after wait period
+            self.best_error = np.min(self.track)
+            self.best_epoch = np.argmin(self.track) # numpy.argmin only finds first occurence
             if self.track[-1] < np.min(self.track[:-1]): # check if last epoch was best epoch
-                bool_best = True
+                self.best_bool = True
             else:
-                bool_best = False
-        return bool_best
+                self.best_bool = False
+        return self.best_bool
 
-    def check_best(self):
-        bool_best = self.bool_best()
-        return bool_best
+    def update(self, error_rate):
+        # append error rate
+        self.track.append(error_rate)
+        # get best condition
+        self.update_best()
+        # get patience
+        self.update_patience()
+        # get break condition
+        self.update_break()
