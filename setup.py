@@ -1,11 +1,10 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
-setup(name='sequence_tools',
-      version='0.2.1',
-      description='sequence_tools',
+setup(name='seqtools',
+      version='0.2.2',
+      description='seqtools',
       url='https://github.com/stefbraun/sequence_tools',
       author='Stefan Braun',
       author_email='stefan.sb.braun@outlook.com',
       license='MIT',
-      packages=['progress', 'metric', 'log'],
-      zip_safe=False)
+      packages=find_packages())
