@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='sequence_tools',
-      version='0.2',
+      version='0.2.1',
       description='sequence_tools',
       url='https://github.com/stefbraun/sequence_tools',
       author='Stefan Braun',
