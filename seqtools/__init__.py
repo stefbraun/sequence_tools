@@ -1,1 +1,1 @@
-__all__ = ['progress', 'metric', 'log']
+__all__ = ['progress', 'metric', 'log', 'legacy_iterator']
