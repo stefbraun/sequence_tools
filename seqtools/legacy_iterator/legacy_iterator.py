@@ -1,8 +1,7 @@
-import cPickle as pkl
-import warnings
+import numpy as np
 
 import h5py
-import numpy as np
+
 
 class LegacyBatchIterator(object):
     """
@@ -18,18 +17,23 @@ class LegacyBatchIterator(object):
             ctc_label_shift = 0
 
         with h5py.File(h5) as hf:
+
             feats = hf.get('features')
             # feats = feats_hdd[:, :]
             feature_lens = np.array(hf.get('feature_lens')).astype(int)
             labels = np.array(hf.get('labels')).astype(int)
             label_lens = np.array(hf.get('label_lens')).astype(int)
-            kys = np.array(hf.get('keys'))
 
-
-            if kys.size == 1:
+            if ('keys' in hf) is True:  # if keys are availabel, use them, otherwise create index keys 1..Nsamples
+                kys = np.array(hf.get('keys'))
+            else:
                 kys = np.zeros((1, len(label_lens)))
                 kys[0, :] = range(len(label_lens))
-            snr_vals = np.array(hf.get('snr')).astype(float)
+
+            if ('snr' in hf) is True:
+                snr_vals = np.array(hf.get('snr')).astype(float)
+            else:
+                snr_vals = np.NAN
 
             feat_idx = idx_to_slice(feature_lens)
             label_idx = idx_to_slice(label_lens)
@@ -112,7 +116,8 @@ class LegacyBatchIterator(object):
 
                     maskX[i, :len_sample] = np.ones((1, len_sample))
 
-                    ctc_labels = np.asarray(batch_labels[i])  + ctc_label_shift  # shift +1 because 0=blank in CTC training
+                    ctc_labels = np.asarray(
+                        batch_labels[i]) + ctc_label_shift  # shift +1 because 0=blank in CTC training
                     bY.extend(ctc_labels)
                     b_lenY[i] = len(ctc_labels)
                 bY = np.asarray(bY, dtype='int32')

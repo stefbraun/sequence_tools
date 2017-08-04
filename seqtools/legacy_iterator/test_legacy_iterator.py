@@ -20,7 +20,7 @@ mode = 'dbg'  # 'dbg'
 debug = 0  # 0
 
 # Load key verificators: reference
-metadata_dir = '/media/stefbraun/ext4/Dropbox/dataset/WSJ/wsj_reference/'
+metadata_dir = '/media/stefbraun/data/Dropbox/dataset/WSJ/wsj_reference/'
 transcripts_int = pkl.load(open(metadata_dir + 'ref_dev_93_transcripts_int.pkl', 'rb'))
 transcripts_lens = pkl.load(open(metadata_dir + 'ref_dev_93_transcripts_lens.pkl', 'rb'))
 
@@ -39,7 +39,7 @@ if pem == 1:
 
 else:
     # path = '/home/stefbraun/data/wsj_reference/ref_train_si84_clean.h5'
-    path = '/media/stefbraun/ext4/Dropbox/dataset/WSJ/wsj_reference/ref_dev_93_clean.h5'
+    path = '/media/stefbraun/data/Dropbox/dataset/WSJ/wsj_reference/ref_dev_93_clean.h5'
     print('Precalculated h5 is used:  {}'.format(path))
 
 # Initialize batch iterator

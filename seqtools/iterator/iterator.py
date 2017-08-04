@@ -22,15 +22,19 @@ class BatchIterator(object):
             feature_lens = np.array(hf.root.feature_lens).astype(int)
             labels = np.array(hf.root.labels).astype(int)
             label_lens = np.array(hf.root.label_lens).astype(int)
-            kys = np.array(hf.root.keys)
 
-
-            if kys.size == 1:
+            if hf.__contains__('/keys') is True:  # if keys are availabel, use them, otherwise create index keys 1..Nsamples
+                if hf.root.keys.maindim ==1:
+                    kys = np.array(hf.get_node('/keys')).T
+                else:
+                    kys = np.array(hf.get_node('/keys')).T
+            else:
                 kys = np.zeros((1, len(label_lens)))
                 kys[0, :] = range(len(label_lens))
-            try:
-                snr_vals = np.array(hf.root.snr).astype(float)
-            except:
+
+            if hf.__contains__('/snr'):
+                snr_vals = np.array(hf.get_node('/snr')).astype(float)
+            else:
                 snr_vals =np.NAN
             feat_idx = idx_to_slice(feature_lens)
             label_idx = idx_to_slice(label_lens)
