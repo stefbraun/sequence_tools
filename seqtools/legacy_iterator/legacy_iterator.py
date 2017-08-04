@@ -24,7 +24,7 @@ class LegacyBatchIterator(object):
             labels = np.array(hf.get('labels')).astype(int)
             label_lens = np.array(hf.get('label_lens')).astype(int)
 
-            if ('keys' in hf) is True:  # if keys are availabel, use them, otherwise create index keys 1..Nsamples
+            if ('keys' in hf) is True:  # if keys are available, use them, otherwise create index keys 1..Nsamples
                 kys = np.array(hf.get('keys'))
             else:
                 kys = np.zeros((1, len(label_lens)))

@@ -23,7 +23,7 @@ class BatchIterator(object):
             labels = np.array(hf.root.labels).astype(int)
             label_lens = np.array(hf.root.label_lens).astype(int)
 
-            if hf.__contains__('/keys') is True:  # if keys are availabel, use them, otherwise create index keys 1..Nsamples
+            if hf.__contains__('/keys') is True:  # if keys are available, use them, otherwise create index keys 1..Nsamples
                 if hf.root.keys.maindim ==1:
                     kys = np.array(hf.get_node('/keys')).T
                 else:
