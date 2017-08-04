@@ -216,7 +216,7 @@ def normalize(batch, normalization):
             s_mean = np.mean(sample, axis=0)
             s_std = np.std(sample, axis=0)
             sample = sample - s_mean[np.newaxis, :]
-            sample = sample / s_std[np.newaxis, :]
+            sample = sample / (s_std[np.newaxis, :] + 1e-7)
 
             batch_normalized.append(sample)
 
