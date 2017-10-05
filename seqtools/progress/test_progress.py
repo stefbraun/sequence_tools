@@ -1,7 +1,8 @@
 import unittest
-import progress
 import numpy as np
 import matplotlib.pyplot as plt
+
+from . import progress
 
 def prepare_data1():
     error_rates = np.cos(np.arange(0,1,0.1))

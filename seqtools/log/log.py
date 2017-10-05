@@ -31,7 +31,7 @@ def show_log(logfile, category, selection, x_mode, y_mode):
     """
     cat_dict = dict()
     cat = 0
-    with open(logfile, 'rb') as f:
+    with open(logfile, 'rt') as f:
         f = csv.reader(f)
         cat_rows = []
         for idx, row in enumerate(f):

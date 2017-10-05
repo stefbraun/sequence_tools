@@ -1,9 +1,10 @@
 from __future__ import print_function
-from legacy_iterator import LegacyBatchIterator, check_zmuv
-import cPickle as pkl
+import pickle as pkl
 import numpy as np
 import matplotlib.pyplot as plt
 import zmq
+
+from legacy_iterator import LegacyBatchIterator, check_zmuv
 
 # Set parameters
 max_frame_size = 20000

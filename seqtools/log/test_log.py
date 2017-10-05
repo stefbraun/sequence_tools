@@ -1,8 +1,9 @@
-import log
 import unittest
 import collections
 import os
 import numpy as np
+
+from . import log
 
 class log_tests(unittest.TestCase):
     def test_write_log(self):

@@ -1,1 +1,1 @@
-from legacy_iterator import *
+from .legacy_iterator import *

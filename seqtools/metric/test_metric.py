@@ -1,7 +1,7 @@
 import unittest
-import metric
 import numpy as np
 
+from . import metric
 
 class metrics_tests(unittest.TestCase):
     def test_convert_from_ctc_to_easy_labels(self):

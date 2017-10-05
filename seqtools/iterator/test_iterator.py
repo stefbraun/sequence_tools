@@ -1,6 +1,6 @@
 from __future__ import print_function
 from iterator import BatchIterator, check_zmuv
-import cPickle as pkl
+import pickle as pkl
 import numpy as np
 import matplotlib.pyplot as plt
 import zmq

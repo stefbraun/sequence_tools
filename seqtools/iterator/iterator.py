@@ -1,4 +1,4 @@
-import cPickle as pkl
+import pickle as pkl
 import warnings
 
 import tables
