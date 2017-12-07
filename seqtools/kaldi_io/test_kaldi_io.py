@@ -13,7 +13,7 @@ class kaldi_tests(unittest.TestCase):
             test_mat = np.random.random((1000,333))
             test_mat2 = test_mat / (i+1)
             ref_dict = {'1': test_mat, '2': test_mat2}
-            with open(ark_file, 'w') as f:
+            with open(ark_file, 'wb') as f:
                 for key, mat in ref_dict.items():
                     kaldi_io.write_mat(f, mat, key=key)
 
