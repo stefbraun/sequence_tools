@@ -131,6 +131,15 @@ class metrics_tests(unittest.TestCase):
         measure = meter.get_metrics()
         self.assertEqual(measure, (0.5, 0.5, 0.16666666666666666)) #0.16 because 1 insertion over 6 target labels, 0.5 because half of the sequences is wrong
 
+    def test_softmax(self):
+        prediction = np.zeros((2, 5, 4))  # as a Batch X Timesteps X Features 3D matrix
+        prediction[0, :4, :] = np.diag([1, 1, 1, 1])
+        prediction[1, :4, :] = np.roll(np.diag([1, 1, 1, 1]), 4)
+        prediction[1, 4, 2] = 1
+        prediction = np.swapaxes(prediction, 0, 1)  # as a Time X Batch X Features 3D matrix
 
+        sm = metric.softmax(prediction, axis=-1)
+
+        self.assertEqual(sm.sum(), 10.0) 
 
 

@@ -8,7 +8,7 @@ class meter:
         self.blank = blank
 
     def extend_guessed_labels(self, prediction):
-        prediction_sm = calc_softmax_in_last_dim(prediction)
+        prediction_sm = softmax(prediction, axis=-1) # compute softmax in last dimension
         guessed_batch_labels = convert_prediction_to_transcription(prediction_sm, self.blank,
                                                                         joiner='')  # greedy path, remove repetitions, prepare string
         self.guessed_labels.extend(guessed_batch_labels)
@@ -84,20 +84,50 @@ def greedy_decoder(sample_prediction, blank, joiner=''):
     guess_vec_elim = eliminate_duplicates_and_blanks(guess_vec, blank)
     return vec2str(guess_vec_elim, joiner)
 
-def softmax(w, t=1.0):
-    # TODO write test
-    e = np.exp(np.array(w) / t)
-    dist = e / np.sum(e)
-    return dist
 
-def calc_softmax_in_last_dim(result):
-    # TODO write test
-    if len(result.shape) != 3:
-        raise AssertionError('Result should be a [A x B x feats] tensor.')
-    for outer_idx in range(result.shape[0]):
-        for inner_idx in range(result.shape[1]):
-            result[outer_idx, inner_idx, :] = softmax(result[outer_idx, inner_idx, :])
-    return result
+def softmax(X, theta=1.0, axis=None):
+    """
+    Compute the softmax of each element along an axis of X.
+
+    Parameters
+    ----------
+    X: ND-Array. Probably should be floats.
+    theta (optional): float parameter, used as a multiplier
+        prior to exponentiation. Default = 1.0
+    axis (optional): axis to compute values along. Default is the
+        first non-singleton axis.
+
+    Returns an array the same size as X. The result will sum to 1
+    along the specified axis.
+    """
+
+    # make X at least 2d
+    y = np.atleast_2d(X)
+
+    # find axis
+    if axis is None:
+        axis = next(j[0] for j in enumerate(y.shape) if j[1] > 1)
+
+    # multiply y against the theta parameter,
+    y = y * float(theta)
+
+    # subtract the max for numerical stability
+    y = y - np.expand_dims(np.max(y, axis=axis), axis)
+
+    # exponentiate y
+    y = np.exp(y)
+
+    # take the sum along the specified axis
+    ax_sum = np.expand_dims(np.sum(y, axis=axis), axis)
+
+    # finally: divide elementwise
+    p = y / ax_sum
+
+    # flatten if X was 1D
+    if len(X.shape) == 1: p = p.flatten()
+
+    return p
+
 
 def eliminate_duplicates_and_blanks(guess_vec, blank):
     """
